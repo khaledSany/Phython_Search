@@ -1,0 +1,49 @@
+straight_line = {
+                    'Natore': 361,
+                    'Naogon': 369,
+                    'Bogra': 375,
+                    'Sirajgonj': 248,
+                    'Kushtia': 324,
+                    'Rajbari': 239,
+                    'Magura': 236,
+                    'Faridpur': 237,
+                    'Manikgonj': 155,
+                    'Tangail': 188,
+                    'Mymenshing': 171,
+                    'Gazipur': 95,
+                    'Dhaka': 0,
+                    'Narayangonj': 85,
+                    'Narshindi': 105,
+                    'Kishorgonj': 155,
+                    'Netrokona': 204,
+                    'Sunamgonj': 245
+                }
+
+p_q, visited = PriorityQueue(), {}
+p_q.put((straight_line[source], 0, source, [source]))
+visited[source] = straight_line[source]
+while not p_q.empty():
+    (heuristic, cost, vertex, path) = p_q.get()
+    print("Queue Status: ",heuristic, cost, vertex, path)
+    if vertex == destination:
+        return heuristic, cost, path
+    for next_node in GRAPH[vertex].keys():
+        current_cost = cost + GRAPH[vertex][next_node]
+        heuristic = current_cost + straight_line[next_node]
+        if not next_node in visited or visited[next_node] >= heuristic:
+            visited[next_node] = heuristic
+            p_q.put((heuristic, current_cost, next_node, path + [next_node]))
+def main():
+
+print('Source :', end=' ')
+source = input().strip()
+print('Destination :', end=' ')
+goal = input().strip()
+if source not in GRAPH or goal not in GRAPH:
+    print(' CITY DOES NOT EXIST.')
+else:
+    heuristic, cost, optimal_path = a_star(source, goal)
+    print('min of total heuristic_value =', heuristic)
+    print('total min cost =', cost)
+    print('\nRoute:')
+    print(' -> '.join(city for city in optimal_path))
